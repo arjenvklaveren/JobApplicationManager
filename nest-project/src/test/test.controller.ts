@@ -1,6 +1,7 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PrismaService } from 'src/misc/prisma.service';
 import { Prisma } from 'generated/prisma/client';
+import type { RegisterDTO } from '@jobapplicationmanager/shared';
 
 @Controller('test')
 export class TestController {
@@ -15,16 +16,10 @@ export class TestController {
             amount: 10
         }
     }
+    @Post('test-register')
+    async testRegister(@Body() createAccountDTO: RegisterDTO): Promise<Prisma.AccountCreateInput> {
 
-    @Post('/test-user')
-    async testPost() : Promise<Prisma.UserCreateInput> {
-        
-        var newUser: Prisma.UserCreateInput = {
-            name: "Arjen",
-            email: "arjenvklaveren2@gmail.com"
-        }
-        return this.prisma.user.create({ data: newUser });
+        return this.prisma.account.create({ data: createAccountDTO });
 
     }
-
 }

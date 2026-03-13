@@ -13,18 +13,16 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
-  posts Post[]
+model Account {
+  id Int @default(autoincrement()) @id
+  name String
+  password String
+  applicant Applicant?
 }
 
-model Post {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Applicant {
+  id Int @default(autoincrement()) @id
+  city String
+  account Account? @relation(fields: [accountId], references: [id])
+  accountId Int? @unique
 }
