@@ -1,5 +1,5 @@
 export interface LoginDTO {
-    id: number,
+    id: number | null,
     username: string,
     password: string
 }

@@ -1,21 +1,17 @@
 import type { LoginDTO } from '@jobapplicationmanager/shared';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Account } from 'generated/prisma/browser';
 
 @Injectable()
 export class AuthService {
     constructor(private jwtService: JwtService) {}
 
-    public async authenticateCreds(loginDTO: LoginDTO) : Promise<{ access_token: string }> {
-
-        if (loginDTO.username != "test" && loginDTO.password != "test") {
-            throw new UnauthorizedException();
-        }
-
-        loginDTO.id = 0;
+    public async generateToken(account: Account): Promise<{ access_token: string }> {
+        
         const tokenPayload = { 
-            sub: loginDTO.id,
-            username: loginDTO.username
+            sub: account.id,
+            username: account.name
         }
 
         const jwt_access_token = await this.jwtService.signAsync(tokenPayload)

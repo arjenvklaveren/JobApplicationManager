@@ -3,17 +3,14 @@ import { reactive } from 'vue';
 import axios, { Axios } from 'axios';
 import type { RegisterDTO } from '@jobapplicationmanager/shared';
 
-const form = reactive<RegisterDTO>({
+const registerForm = reactive<RegisterDTO>({
   name: '',
   password: '',
   city: ''
 })
 
-function submitRegister() {
-  console.log(form);
-
-  axios.post("http://localhost:3000/test/test-register", form);
-  
+async function submitRegister() {
+  await axios.post("http://localhost:3000/account/register", registerForm);  
 }
 
 </script>
@@ -22,10 +19,10 @@ function submitRegister() {
 
 <form @submit.prevent="submitRegister">
     <h3>Register</h3>
-    <input v-model="form.name" placeholder="Username">
-    <input v-model="form.password" placeholder="Password">
-    <input v-model="form.city" placeholder="City">
-    <button type="submit">Create</button>
+    <input v-model="registerForm.name" placeholder="Username">
+    <input v-model="registerForm.password" placeholder="Password">
+    <input v-model="registerForm.city" placeholder="City">
+    <button type="submit">Register</button>
 </form>
 
 
