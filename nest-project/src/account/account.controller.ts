@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AccountService } from './account.service';
 import type { LoginDTO, RegisterDTO } from '@jobapplicationmanager/shared';
-import { ApiBearerAuth, ApiBody, ApiHeader } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiHeader } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import * as argon from 'argon2' 
 import { Prisma } from 'generated/prisma/browser';
@@ -24,7 +24,7 @@ export class AccountController {
     })
     @Post('/register')
     async register(@Body() registerDTO: RegisterDTO) {
-        await this.accountService.create(registerDTO);
+        await this.accountService.createAccount(registerDTO);
     }
 
     //@UseGuards(AuthGuard)

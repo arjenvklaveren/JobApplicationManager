@@ -25,7 +25,7 @@ export class AccountService {
         return access_token;
     }
 
-    public async create(registerDTO: RegisterDTO) {
+    public async createAccount(registerDTO: RegisterDTO) {
 
         registerDTO.password = await argon.hash(registerDTO.password);
         
@@ -39,6 +39,6 @@ export class AccountService {
             }
         };
 
-        await this.accountRepository.createNewAsync(accountApplicationObject);
+        await this.accountRepository.createAsync(accountApplicationObject);
     }
 }

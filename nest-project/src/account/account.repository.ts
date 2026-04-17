@@ -10,7 +10,7 @@ export class AccountRepository {
         return await this.prisma.account.findUnique({ where: { name: username } });
     }
 
-    public async createNewAsync(account: Prisma.AccountCreateInput) {
+    public async createAsync(account: Prisma.AccountCreateInput) {
         await this.prisma.account.create({ data: account });
     }
 

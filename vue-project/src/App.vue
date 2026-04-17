@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import SideBar from './components/SideBar.vue';
 import TopBar from './components/TopBar.vue';
+import ObjectPopupModal from './components/ObjectPopupModal.vue';
 </script>
 
 <template>
@@ -13,13 +14,13 @@ import TopBar from './components/TopBar.vue';
 
       <div id="app-content">
         <SideBar/>
-        <RouterView />
+        <RouterView :key="$route.fullPath"/>
       </div>
       
     </div>
   </header>
 
-
+<ObjectPopupModal/>
 </template>
 
 <style scoped>

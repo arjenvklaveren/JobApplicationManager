@@ -12,7 +12,6 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Job Applications API')
     .setDescription('Testing environment for job applications API')
-    .addBearerAuth()
     .setVersion('1.1')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);

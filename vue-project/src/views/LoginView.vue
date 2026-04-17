@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-import axios, { Axios } from 'axios';
+import api from '@/api';
 import type { LoginDTO } from '@jobapplicationmanager/shared';
 import router from '@/router';
 
@@ -11,9 +11,7 @@ const loginForm = reactive<LoginDTO>({
 })
 
 async function submitLogin() {
-    await axios.post<{ access_token: string }>("http://localhost:3000/account/login", loginForm, {
-        withCredentials: true
-    })
+    await api.post<{ access_token: string }>("http://localhost:3000/account/login", loginForm)
     .then(() => {
         router.push('/');
     })

@@ -1,21 +1,58 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import TestView from '@/views/TestView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import DashboardView from '@/views/DashboardView.vue'
+import TaskGridView from '@/views/TaskGridView.vue'
+import type { ObjectListViewData } from '@/types/ObjectListViewData'
+import ObjectListView from '@/views/ObjectListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      name: 'dashboard-startup',
+      component: DashboardView,
     },
     {
-      path: '/test',
-      name: 'test',
-      component: TestView,
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+    },
+    {
+      path: '/companies',
+      name: 'companies',
+      component: ObjectListView,
+      props: (): ObjectListViewData => ({
+        controllerName: 'company',
+        title: 'Companies',
+        icon: 'company',
+      }),
+    },
+    {
+      path: '/positions',
+      name: 'positions',
+      component: ObjectListView,
+      props: (): ObjectListViewData => ({
+        controllerName: 'position',
+        title: 'Positions',
+        icon: 'position',
+      }),
+    },
+    // {
+    //   path: '/appointments',
+    //   name: 'appointments',
+    //   component: AppointmentListView,
+    // },
+    // {
+    //   path: '/applications',
+    //   name: 'applications',
+    //   component: ApplicationListView,
+    // },
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: TaskGridView,
     },
     {
       path: '/login',
@@ -26,15 +63,7 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
+    }
   ],
 })
 
