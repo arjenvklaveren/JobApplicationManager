@@ -3,6 +3,8 @@ import type { ObjectListViewData } from '@/types/ObjectListViewData';
 import api from '@/api';
 import { ref } from 'vue';
 import { useObjectModal } from '@/composables/modalObjectData.vue';
+import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
+import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
 
 const props = defineProps<ObjectListViewData>()
 var listData: any = ref([]);
@@ -24,14 +26,35 @@ async function loadObjectListData() {
         });
 }
 
-function openObjectModal(item: any) {
-    objectModal.open(item)
-        .confirm((returnedObject) => {
-            console.log("Confirmed:", returnedObject);
+function openObjectModal(item: any, modelView: ObjectModelViewType) {
+
+    if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(props.objectType);
+
+    objectModal.open(item, modelView)
+        .onConfirm((returnedObject) => {
+
+            if (objectModal.viewtype.value == ObjectModelViewType.CreateView) {
+                listData.value = [...listData.value, returnedObject.value];
+            }
+
+            if (objectModal.viewtype.value == ObjectModelViewType.EditView) {
+                const updatedItem = returnedObject.value;
+
+                listData.value = listData.value.map((listItem: any) =>
+                    listItem.id === updatedItem.id ? updatedItem : listItem
+                );
+            }
+
         })
-        .cancel(() => {
+        .onCancel(() => {
             console.log("Cancelled");
+        })
+        .onDelete(() => {
+            listData.value = listData.value.filter(
+                (listItem: any) => listItem.id !== item.id
+            );
         });
+
 }
 
 
@@ -42,6 +65,10 @@ function openObjectModal(item: any) {
     <div
     class="main-container">
         <h3> {{ title }} </h3>
+        <button
+            @click="openObjectModal(null, ObjectModelViewType.CreateView)">
+                Add
+        </button>
         <div 
         v-if="listData.length > 0">
 
@@ -59,7 +86,7 @@ function openObjectModal(item: any) {
             <!-- Data rows -->
             <div
             class="list-grid list-item-row"
-            @click="openObjectModal(listItem)" 
+            @click="openObjectModal(listItem, ObjectModelViewType.DisplayView)" 
             :style="{ gridTemplateColumns: `repeat(${Object.values(listData[0]).length}, 1fr)` }" 
             v-for="listItem in listData">
                 <span 
@@ -77,7 +104,6 @@ function openObjectModal(item: any) {
         <!-- No data -->
         <div v-else>
             <p>No items found</p>
-            <button>Add</button>
         </div>
     </div>
 

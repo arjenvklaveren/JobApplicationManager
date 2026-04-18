@@ -8,3 +8,13 @@ export interface PositionDTO {
     company: CompanyDTO | null,
     application: ApplicationDTO | null,
 }
+
+export function defaultPositionDTO(): PositionDTO {
+    return {
+        id: null,
+        title: '',
+        sourceUrl: '',
+        company: null,
+        application: null,
+    }
+}

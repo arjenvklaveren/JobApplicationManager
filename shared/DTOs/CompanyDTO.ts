@@ -7,3 +7,13 @@ export interface CompanyDTO {
     websiteUrl: string,
     positions: PositionDTO[]
 }
+
+export function defaultCompanyDTO(): CompanyDTO {
+    return {
+        id: null,
+        name: '',
+        city: '',
+        websiteUrl: '',
+        positions: []
+    }
+}

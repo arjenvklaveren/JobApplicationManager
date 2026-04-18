@@ -5,6 +5,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import TaskGridView from '@/views/TaskGridView.vue'
 import type { ObjectListViewData } from '@/types/ObjectListViewData'
 import ObjectListView from '@/views/ObjectListView.vue'
+import { ObjectListObjectType } from '@/enums/ObjectListObjectType'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,7 @@ const router = createRouter({
       component: ObjectListView,
       props: (): ObjectListViewData => ({
         controllerName: 'company',
+        objectType: ObjectListObjectType.Companies,
         title: 'Companies',
         icon: 'company',
       }),
@@ -35,6 +37,7 @@ const router = createRouter({
       component: ObjectListView,
       props: (): ObjectListViewData => ({
         controllerName: 'position',
+        objectType: ObjectListObjectType.Positions,
         title: 'Positions',
         icon: 'position',
       }),
