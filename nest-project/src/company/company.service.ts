@@ -8,6 +8,13 @@ import { mapCompanyToDTO } from 'helpers/dtoConverterHelper';
 export class CompanyService {
     constructor(private companyRepository: CompanyRepository) {}
 
+    public async getAllCompaniesFromUser(userId: number) {
+        var companies = await this.companyRepository.getAllAsync(userId);
+
+        var companiesDTOs = companies.map(mapCompanyToDTO);
+        return companiesDTOs;
+    }
+
     public async addCompany(companyDTO: CompanyDTO, accountId: number) {
 
         const createCompanyObject: Prisma.CompanyCreateInput = {
@@ -22,10 +29,18 @@ export class CompanyService {
         await this.companyRepository.createAsync(createCompanyObject);
     }
 
-    public async getAllCompaniesFromUser(userId: number) {
-        var companies = await this.companyRepository.getAllAsync(userId);
+    public async updateCompany(companyDTO: CompanyDTO) {
 
-        var companiesDTOs = companies.map(mapCompanyToDTO);
-        return companiesDTOs;
+        const updateCompanyObject: Prisma.CompanyUpdateInput = {
+            name: companyDTO.name,
+            city: companyDTO.city,
+            websiteUrl: companyDTO.websiteUrl,
+        }
+
+        await this.companyRepository.updateAsync(updateCompanyObject, companyDTO.id!);
+    }
+
+    public async deleteCompany(companyId: number, accountId: number) {
+        await this.companyRepository.deleteAsync(companyId, accountId);
     }
 }

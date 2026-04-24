@@ -6,14 +6,32 @@ import { PrismaService } from 'src/misc/prisma.service';
 export class CompanyRepository {
     constructor(private prisma: PrismaService) { }
     
-    public async createAsync(company: Prisma.CompanyCreateInput) {
-        await this.prisma.company.create({ data: company });
-    }
-
     public async getAllAsync(userId: number) {
         return await this.prisma.company.findMany({
             where: { accountId: userId },
             include: { positions: true }
         });
+    }
+
+    public async createAsync(company: Prisma.CompanyCreateInput) {
+        await this.prisma.company.create({ data: company });
+    }
+
+    public async updateAsync(company: Prisma.CompanyUpdateInput, companyId: number,) {
+        return await this.prisma.company.update({
+            where: {
+                id: companyId,
+            },
+            data: company
+        })
+    }
+
+    public async deleteAsync(companyId: number, accountId: number) {
+        return await this.prisma.company.delete({
+            where: {
+                id: companyId,
+                accountId: accountId
+            }
+        })
     }
 }

@@ -25,7 +25,7 @@ const router = createRouter({
       name: 'companies',
       component: ObjectListView,
       props: (): ObjectListViewData => ({
-        controllerName: 'company',
+        objectName: 'company',
         objectType: ObjectListObjectType.Companies,
         title: 'Companies',
         icon: 'company',
@@ -36,7 +36,7 @@ const router = createRouter({
       name: 'positions',
       component: ObjectListView,
       props: (): ObjectListViewData => ({
-        controllerName: 'position',
+        objectName: 'position',
         objectType: ObjectListObjectType.Positions,
         title: 'Positions',
         icon: 'position',

@@ -8,53 +8,94 @@ import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHe
 
 const props = defineProps<ObjectListViewData>()
 var listData: any = ref([]);
-var loading: boolean = true;
+var loading = ref<boolean>(true);
 
 const objectModal = useObjectModal();
 
 loadObjectListData();
 
 async function loadObjectListData() {
-    await api.get(props.controllerName + "/" + (props.customGetPath ?? "get-all"))
+    await api.get(props.objectName + "/" + (props.customGetPath ?? "get-all"))
         .then((data) => {
-            loading = false;
+            loading.value = false;
             listData.value = data.data;
         })
         .catch((error) => {
-            loading = false;
+            loading.value = false;
             console.log(error);
         });
 }
 
 function openObjectModal(item: any, modelView: ObjectModelViewType) {
 
+    //Instantiate empty object if opened as create view
     if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(props.objectType);
 
     objectModal.open(item, modelView)
         .onConfirm((returnedObject) => {
 
+            //Created a new object
             if (objectModal.viewtype.value == ObjectModelViewType.CreateView) {
-                listData.value = [...listData.value, returnedObject.value];
+                onObjectCreated(returnedObject.value);
             }
 
+            //Edited an object
             if (objectModal.viewtype.value == ObjectModelViewType.EditView) {
-                const updatedItem = returnedObject.value;
-
-                listData.value = listData.value.map((listItem: any) =>
-                    listItem.id === updatedItem.id ? updatedItem : listItem
-                );
+                onObjectEdited(returnedObject.value);
             }
 
         })
+
+        //Deleted an object
+        .onDelete(() => {
+            onObjectDeleted(item);  
+        })
+
+        //Did nothing
         .onCancel(() => {
             console.log("Cancelled");
-        })
-        .onDelete(() => {
-            listData.value = listData.value.filter(
-                (listItem: any) => listItem.id !== item.id
-            );
         });
+}
 
+async function onObjectCreated(object: any) {
+    loading.value = true;
+    await api.post(props.objectName + "/" + (props.customAddPath ?? "add-" + props.objectName), object)
+        .then(() => {
+            listData.value = [...listData.value, object];
+            loading.value = false;
+        })
+        .catch((error) => {
+            loading.value = false;
+        }
+    );
+}
+
+async function onObjectEdited(object: any) {
+    loading.value = true;
+    await api.put(props.objectName + "/" + (props.customUpdatePath ?? "update-" + props.objectName), object)
+        .then(() => {
+            listData.value = listData.value.map((listItem: any) =>
+                listItem.id === object.id ? object : listItem);
+            loading.value = false;
+        })
+        .catch((error) => {
+            loading.value = false;
+        }
+    ); 
+}
+
+async function onObjectDeleted(object: any) {
+    loading.value = true;
+    await api.delete(props.objectName + "/" + (props.customDeletePath ?? "delete-" + props.objectName) + "/" + object.id)
+        .then(() => {
+            listData.value = listData.value.filter((listItem: any) =>
+                listItem.id !== object.id);
+            loading.value = false;
+        })
+        .catch((error) => {
+            loading.value = false;
+        }
+    ); 
 }
 
 
@@ -64,7 +105,13 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
 
     <div
     class="main-container">
-        <h3> {{ title }} </h3>
+
+        <div class="title-container">
+            <h3> {{ title }} </h3>
+            <span v-if="loading" class="loader"></span>
+        </div>
+
+
         <button
             @click="openObjectModal(null, ObjectModelViewType.CreateView)">
                 Add
@@ -94,16 +141,10 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
                     {{ listItemValue }}
                 </span>
             </div>
-
-        <!-- Loading -->
         </div>
-        <div v-else-if="loading == true">
-            <span>Loading...</span>
-        </div>
-
         <!-- No data -->
         <div v-else>
-            <p>No items found</p>
+            <p v-if="loading != true">No items found</p>
         </div>
     </div>
 
@@ -114,6 +155,12 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
 
 .main-container {
     width: 100%;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .list-grid {
@@ -134,5 +181,25 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
         }
     }
 }
+
+.loader {
+    height: 1rem;
+    aspect-ratio: 1/1;
+    border: 0.15rem solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}    
 
 </style>
