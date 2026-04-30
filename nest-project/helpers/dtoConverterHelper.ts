@@ -11,7 +11,8 @@ export function mapCompanyToDTO(company: CompanyWithPositions): CompanyDTO {
         name: company.name,
         city: company.city,
         websiteUrl: company.websiteUrl,
-        positions: company.positions.map(mapPositionToDTO)
+        positions: company.positions.map(mapPositionToDTO),
+        notes: []
     };
 }
 

@@ -6,6 +6,7 @@ import TaskGridView from '@/views/TaskGridView.vue'
 import type { ObjectListViewData } from '@/types/ObjectListViewData'
 import ObjectListView from '@/views/ObjectListView.vue'
 import { ObjectListObjectType } from '@/enums/ObjectListObjectType'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,13 +62,34 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: {
+        ignoreAuth: true,
+      }
     },
     {
       path: '/register',
       name: 'register',
       component: RegisterView,
+      meta: {
+        ignoreAuth: true,
+      }
     }
   ],
 })
+
+
+router.beforeEach((to, from) => {
+  const authStore = useAuthStore();
+
+  if (to.meta.ignoreAuth == true) return true;
+
+   if (!authStore.isAuthenticated()) {
+        return '/login';
+    }
+})
+
+function isAuth_Temp() {
+  return true;
+}
 
 export default router

@@ -3,6 +3,9 @@ import { reactive } from 'vue';
 import api from '@/api';
 import type { LoginDTO } from '@jobapplicationmanager/shared';
 import router from '@/router';
+import { useAuthStore } from '@/stores/authStore';
+
+const authStore = useAuthStore();
 
 const loginForm = reactive<LoginDTO>({
   id: null,
@@ -13,6 +16,7 @@ const loginForm = reactive<LoginDTO>({
 async function submitLogin() {
     await api.post<{ access_token: string }>("http://localhost:3000/account/login", loginForm)
     .then(() => {
+        authStore.setAuthenticated();
         router.push('/');
     })
     .catch((error) => {

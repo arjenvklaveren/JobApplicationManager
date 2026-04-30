@@ -1,11 +1,16 @@
-<!-- <script lang="ts">
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/authStore';
 import { RouterLink } from 'vue-router'
-</script> -->
+
+const authStore = useAuthStore();
+
+</script>
 
 <template>
     <div class="topbar-container">
-        Topbar
-        <RouterLink to="/login">Login</RouterLink>
+        <span>Topbar</span>
+        <RouterLink class="login-button" v-if="!authStore.isAuthenticated()" to="/login">Login</RouterLink>
+        <span class="logout-button" v-else @click="authStore.logout()">Logout</span>
     </div>
 </template>
 
@@ -20,6 +25,14 @@ import { RouterLink } from 'vue-router'
     justify-content: space-between;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+}
+
+.logout-button {
+    text-decoration: underline;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 </style>

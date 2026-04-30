@@ -136,9 +136,18 @@ async function onObjectDeleted(object: any) {
             @click="openObjectModal(listItem, ObjectModelViewType.DisplayView)" 
             :style="{ gridTemplateColumns: `repeat(${Object.values(listData[0]).length}, 1fr)` }" 
             v-for="listItem in listData">
-                <span 
-                v-for="listItemValue in Object.values(listItem)">
-                    {{ listItemValue }}
+                <span v-for="(listItemValue, key) in listItem">
+
+                    <template v-if="typeof listItemValue === 'object'">
+                        <span v-if="listItemValue !== null">
+                            {{ key }}
+                            <span v-if="Array.isArray(listItemValue)">({{ listItemValue.length }})</span>
+                        </span>
+                        <span v-else>Null</span>
+                    </template>
+
+                    <span v-else>{{ listItemValue }}</span>
+
                 </span>
             </div>
         </div>

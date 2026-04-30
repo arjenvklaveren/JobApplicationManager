@@ -6,10 +6,19 @@ import { PrismaService } from 'src/misc/prisma.service';
 export class PositionRepository {
     constructor(private prisma: PrismaService) { }
 
-    public async getAllAsync(userId: number) {
+    public async getAllAsync(accountId: number) {
         return await this.prisma.position.findMany({
-            where: { accountId: userId }
+            where: { accountId: accountId }
         });
+    }
+
+    public async getAllAtCompanyAsync(companyId: number, accountId: number) {
+        return await this.prisma.position.findMany({
+            where: {
+                companyId: companyId,
+                accountId: accountId,
+            }
+        })
     }
 
      public async createAsync(position: Prisma.PositionCreateInput) {

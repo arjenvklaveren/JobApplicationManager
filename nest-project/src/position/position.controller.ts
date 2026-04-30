@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { PositionService } from './position.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { User } from 'src/auth/decorators/user.decorator';
@@ -10,10 +10,15 @@ export class PositionController {
     constructor(private positionService: PositionService) { }
     
     @Get('get-all')
-    public async getPositions(
-        @User() user: any)
-    {
+    public async getPositions(@User() user: any) {
+        
         return await this.positionService.getAllPositionsFromUser(user.sub);
+    }
+
+    @Get('get-all-at-company')
+    public async getPositionsAtCompany( @Query('companyId', ParseIntPipe) companyId, @User() user: any) {
+     
+        return await this.positionService.getAllPositionsAtCompany(companyId, user.sub);
     }
 
     @Post('add-position')

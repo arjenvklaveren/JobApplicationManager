@@ -6,9 +6,9 @@ import { PrismaService } from 'src/misc/prisma.service';
 export class CompanyRepository {
     constructor(private prisma: PrismaService) { }
     
-    public async getAllAsync(userId: number) {
+    public async getAllAsync(accountId: number) {
         return await this.prisma.company.findMany({
-            where: { accountId: userId },
+            where: { accountId: accountId },
             include: { positions: true }
         });
     }

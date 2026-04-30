@@ -9,8 +9,15 @@ import { connect } from 'http2';
 export class PositionService {
     constructor(private positionRepository: PositionRepository) {}
 
-    public async getAllPositionsFromUser(userId: number) {
-        var positions = await this.positionRepository.getAllAsync(userId);
+    public async getAllPositionsFromUser(accountId: number) {
+        var positions = await this.positionRepository.getAllAsync(accountId);
+
+        var positionsDTOs = positions.map(mapPositionToDTO);
+        return positionsDTOs;
+    }
+
+    public async getAllPositionsAtCompany(companyId: number, accountId: number) {
+        var positions = await this.positionRepository.getAllAtCompanyAsync(companyId, accountId);
 
         var positionsDTOs = positions.map(mapPositionToDTO);
         return positionsDTOs;

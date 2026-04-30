@@ -8,8 +8,8 @@ import { mapCompanyToDTO } from 'helpers/dtoConverterHelper';
 export class CompanyService {
     constructor(private companyRepository: CompanyRepository) {}
 
-    public async getAllCompaniesFromUser(userId: number) {
-        var companies = await this.companyRepository.getAllAsync(userId);
+    public async getAllCompaniesFromUser(accountId: number) {
+        var companies = await this.companyRepository.getAllAsync(accountId);
 
         var companiesDTOs = companies.map(mapCompanyToDTO);
         return companiesDTOs;
