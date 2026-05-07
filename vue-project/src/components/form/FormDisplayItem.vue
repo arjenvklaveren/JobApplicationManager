@@ -13,9 +13,7 @@ const props = defineProps<{
             {{ props.label }}
         </span>
 
-        <span class="prop-divider">
-            :
-        </span>
+        <span class="prop-divider">: </span>
 
         <span class="prop-value">
             {{ props.value }}

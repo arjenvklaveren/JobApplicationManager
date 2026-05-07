@@ -1,4 +1,5 @@
 import type { ObjectListObjectType } from "@/enums/ObjectListObjectType";
+import type { CustomModalElement } from "./CustomModalElement";
 
 export interface ObjectListViewData {
     objectName: string,
@@ -9,4 +10,7 @@ export interface ObjectListViewData {
     customDeletePath?: string | null,
     title: string,
     icon: string,
+
+    customObjectModalElements?: CustomModalElement[] | null,
+    modalIgnoredProperties?: string[] | null,
 }

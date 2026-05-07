@@ -7,6 +7,7 @@ import type { ObjectListViewData } from '@/types/ObjectListViewData'
 import ObjectListView from '@/views/ObjectListView.vue'
 import { ObjectListObjectType } from '@/enums/ObjectListObjectType'
 import { useAuthStore } from '@/stores/authStore'
+import { getObjectListViewData } from './objectListViewConfig'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,23 +26,13 @@ const router = createRouter({
       path: '/companies',
       name: 'companies',
       component: ObjectListView,
-      props: (): ObjectListViewData => ({
-        objectName: 'company',
-        objectType: ObjectListObjectType.Companies,
-        title: 'Companies',
-        icon: 'company',
-      }),
+      props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.Companies)
     },
     {
       path: '/positions',
       name: 'positions',
       component: ObjectListView,
-      props: (): ObjectListViewData => ({
-        objectName: 'position',
-        objectType: ObjectListObjectType.Positions,
-        title: 'Positions',
-        icon: 'position',
-      }),
+      props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.Positions)
     },
     // {
     //   path: '/appointments',

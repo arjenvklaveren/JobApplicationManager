@@ -9,6 +9,7 @@ const modal = useObjectModal();
 function onEditItemUpdate({ key, value }: { key: string | number; value: any }) {
     modal.data.value[key] = value;
 }
+
 </script>
 
 <template>
@@ -16,19 +17,28 @@ function onEditItemUpdate({ key, value }: { key: string | number; value: any }) 
         <div v-if="modal.isOpen.value" class="modal-overlay" @click.self="modal.close()">
             <div class="modal">
                 <h3>Item details</h3>
-
                 
                 <p v-if="modal.viewtype.value == ObjectModelViewType.DisplayView"
                     v-for="(value, key) in modal.data.value">
-                    <FormDisplayItem :label="key" :value="value" />
+                    <FormDisplayItem v-if="!modal.ignoredElements.value?.includes(key.toString())" :label="key" :value="value" />
                 </p>
 
                 <p v-if="modal.viewtype.value == ObjectModelViewType.EditView || modal.viewtype.value == ObjectModelViewType.CreateView"
                     v-for="(value, key) in modal.data.value">
-                    <FormEditItem :label="key" :value="value" @update="onEditItemUpdate" />
+                    <FormEditItem v-if="!modal.ignoredElements.value?.includes(key.toString())" :label="key" :value="value" @update="onEditItemUpdate" />
                 </p>
+
+                <template v-if="modal.customElements.value != null">
+                    <component v-for="(element, index) in modal.customElements.value"
+                        :key="index"
+                        :is="{ ...element.component }"
+                        v-bind="element.props"
+                        :isEditMode="modal.viewtype.value == ObjectModelViewType.EditView"
+                        :initialObject="modal.data"
+                        @update="onEditItemUpdate"
+                    />
+                </template>
                 
-  
                 <button @click="modal.close()">Close</button>
 
                 <button v-if="modal.viewtype.value == ObjectModelViewType.DisplayView"

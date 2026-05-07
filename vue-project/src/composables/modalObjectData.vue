@@ -1,21 +1,27 @@
 <script lang="ts">
 
 import { ObjectModelViewType } from "@/enums/ObjectModalViewType";
+import type { CustomModalElement } from "@/types/CustomModalElement";
 import { ref } from "vue";
-
+ 
 const isOpen = ref(false);
 const data = ref<any>(null);
 const viewtype = ref<ObjectModelViewType>();
+const customElements = ref<CustomModalElement[] | null>();
+const ignoredElements = ref<string[] | null>();
 
 let confirmCallback: ((value: any) => void) | null = null;
 let cancelCallback: (() => void) | null = null;
 let deleteCallback: ((value: any) => void) | null = null;
 
 export function useObjectModal() {
-    function open(payload: any, modalViewtype: ObjectModelViewType) {
+    function open(payload: any, modalViewtype: ObjectModelViewType, ignoredElementsKeys?: string[] | null, customModalElements?: CustomModalElement[] | null) {
+
         data.value = { ...payload };
         isOpen.value = true;
         viewtype.value = modalViewtype; 
+        customElements.value = customModalElements || null;
+        ignoredElements.value = ignoredElementsKeys || null;
 
         return {
             onConfirm(cb: (value: any) => void) {
@@ -67,6 +73,8 @@ export function useObjectModal() {
         isOpen,
         data,
         viewtype,
+        customElements,
+        ignoredElements,
         open,
         close,
         confirm,

@@ -2,9 +2,9 @@
 import type { ObjectListViewData } from '@/types/ObjectListViewData';
 import api from '@/api';
 import { ref } from 'vue';
-import { useObjectModal } from '@/composables/modalObjectData.vue';
 import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
+import { useObjectModal } from '@/composables/modalObjectData.vue';
 
 const props = defineProps<ObjectListViewData>()
 var listData: any = ref([]);
@@ -31,7 +31,7 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
     //Instantiate empty object if opened as create view
     if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(props.objectType);
 
-    objectModal.open(item, modelView)
+    objectModal.open(item, modelView, props.modalIgnoredProperties, props.customObjectModalElements)
         .onConfirm((returnedObject) => {
 
             //Created a new object
@@ -48,7 +48,7 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
 
         //Deleted an object
         .onDelete(() => {
-            onObjectDeleted(item);  
+            //onObjectDeleted(item);  
         })
 
         //Did nothing
@@ -80,6 +80,7 @@ async function onObjectEdited(object: any) {
         })
         .catch((error) => {
             loading.value = false;
+            console.log(error);
         }
     ); 
 }
@@ -94,6 +95,7 @@ async function onObjectDeleted(object: any) {
         })
         .catch((error) => {
             loading.value = false;
+            console.log(error);
         }
     ); 
 }

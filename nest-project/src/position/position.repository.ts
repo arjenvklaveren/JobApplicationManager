@@ -8,7 +8,8 @@ export class PositionRepository {
 
     public async getAllAsync(accountId: number) {
         return await this.prisma.position.findMany({
-            where: { accountId: accountId }
+            where: { accountId: accountId },
+            include: { company: true }
         });
     }
 
@@ -17,7 +18,8 @@ export class PositionRepository {
             where: {
                 companyId: companyId,
                 accountId: accountId,
-            }
+            },
+            include: {company: true}
         })
     }
 

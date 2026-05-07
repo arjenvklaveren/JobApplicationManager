@@ -10,7 +10,6 @@ export const useAuthStore = defineStore('auth', () => {
     async function initialize() {
         await api.get('account/check-auth-state')
             .then(() => {
-                console.log("here");
                 isAuth.value = true;
             })
             .catch(() => {
@@ -20,7 +19,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     function isAuthenticated() {
-        console.log(isAuth.value);
         return isAuth.value;
     }
 

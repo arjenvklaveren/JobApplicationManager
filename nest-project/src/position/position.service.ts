@@ -3,7 +3,6 @@ import { PositionRepository } from './position.repository';
 import { mapPositionToDTO } from 'helpers/dtoConverterHelper';
 import type { PositionDTO } from '@jobapplicationmanager/shared';
 import { Prisma } from 'generated/prisma/browser';
-import { connect } from 'http2';
 
 @Injectable()
 export class PositionService {
@@ -12,14 +11,14 @@ export class PositionService {
     public async getAllPositionsFromUser(accountId: number) {
         var positions = await this.positionRepository.getAllAsync(accountId);
 
-        var positionsDTOs = positions.map(mapPositionToDTO);
+        var positionsDTOs = positions.map(position => mapPositionToDTO(position, position.company));
         return positionsDTOs;
     }
 
     public async getAllPositionsAtCompany(companyId: number, accountId: number) {
         var positions = await this.positionRepository.getAllAtCompanyAsync(companyId, accountId);
 
-        var positionsDTOs = positions.map(mapPositionToDTO);
+        var positionsDTOs = positions.map(position => mapPositionToDTO(position, position.company));
         return positionsDTOs;
     }
 
