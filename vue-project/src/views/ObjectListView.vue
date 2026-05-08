@@ -4,7 +4,10 @@ import api from '@/api';
 import { ref } from 'vue';
 import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
-import { useObjectModal } from '@/composables/modalObjectData.vue';
+import { useObjectModal } from '@/composables/ModalObjectData.vue';
+import { getObjectListObjectTypeByName, getObjectListViewData } from '@/router/objectListViewConfig';
+import { ObjectListObjectType } from '@/enums/ObjectListObjectType';
+import type { ListObjectRedirectData } from '@/types/ListObjectRedirectData';
 
 const props = defineProps<ObjectListViewData>()
 var listData: any = ref([]);
@@ -31,7 +34,7 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
     //Instantiate empty object if opened as create view
     if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(props.objectType);
 
-    objectModal.open(item, modelView, props.modalIgnoredProperties, props.customObjectModalElements)
+    objectModal.open(item, modelView, false, props.modalIgnoredProperties, props.customObjectModalElements)
         .onConfirm((returnedObject) => {
 
             //Created a new object
@@ -100,6 +103,25 @@ async function onObjectDeleted(object: any) {
     ); 
 }
 
+function onCLickItemArrayObject(event: Event, item: any, objectIdentifier: string) {
+    event.stopPropagation();
+    var redirectData: ListObjectRedirectData | null = props.propertyRedirectData?.find((item) => item.sourcePropertyName == objectIdentifier) ?? null;
+
+    //TEMP
+    if (redirectData != null) {
+        window.location.href = redirectData.redirectUrl;
+    }
+}
+
+function onClickItemJsonObject(event: Event, item: any, objectIdentifier: string) {
+    event.stopPropagation();
+
+    var objectListObjectType = getObjectListObjectTypeByName(objectIdentifier);
+    if (objectListObjectType == undefined) return; 
+
+    var objectConfig = getObjectListViewData(objectListObjectType!); 
+    objectModal.open(item, ObjectModelViewType.DisplayView, true, objectConfig.modalIgnoredProperties, objectConfig.customObjectModalElements);
+}
 
 </script>
 
@@ -141,9 +163,20 @@ async function onObjectDeleted(object: any) {
                 <span v-for="(listItemValue, key) in listItem">
 
                     <template v-if="typeof listItemValue === 'object'">
-                        <span v-if="listItemValue !== null">
-                            {{ key }}
-                            <span v-if="Array.isArray(listItemValue)">({{ listItemValue.length }})</span>
+                        <span v-if="listItemValue !== null" class="list-item-object">
+
+                            <span v-if="Array.isArray(listItemValue)"
+                                @click="onCLickItemArrayObject($event, listItemValue, key.toString())" 
+                                class="list-item-object-array">{{ key }} 
+                                ({{ listItemValue.length }})
+                            </span>
+
+                            <span v-else 
+                                @click="onClickItemJsonObject($event, listItemValue, key.toString())" 
+                                class="list-item-object-json">
+                                {{ listItemValue['name'] || '[NO-NAME]' }}
+                            </span>
+
                         </span>
                         <span v-else>Null</span>
                     </template>
@@ -190,6 +223,21 @@ async function onObjectDeleted(object: any) {
             background-color: purple;
             cursor: pointer;
         }
+    }
+}
+
+.list-item-object {
+
+    .list-item-object-array {
+        
+    }
+    .list-item-object-json {
+
+    }
+
+    &:hover {
+        background-color: red;
+        cursor: pointer;
     }
 }
 

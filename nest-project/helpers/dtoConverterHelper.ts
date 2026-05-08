@@ -1,5 +1,5 @@
-import { CompanyDTO, PositionDTO } from "@jobapplicationmanager/shared";
-import { Company, Position, Prisma } from "generated/prisma/browser";
+import { CompanyDTO, PositionDTO, TaskDTO } from "@jobapplicationmanager/shared";
+import { Company, Position, Prisma, Task } from "generated/prisma/browser";
 
 type CompanyWithPositions = Prisma.CompanyGetPayload<{
   include: { positions: true };
@@ -31,4 +31,15 @@ export function mapPositionToDTO(position: Position, company: Company): Position
         },
         application: null
     };
+}
+
+export function mapTaskToDTO(task: Task): TaskDTO {
+    return {
+        id: task.id,
+        name: task.name,
+        description: task.description,
+        stage: task.stage,
+        index: task.index,
+        deadline: task.deadline
+    }
 }

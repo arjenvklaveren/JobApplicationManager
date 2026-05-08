@@ -8,7 +8,13 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
     title: "Companies",
     icon: "company",
     objectType: ObjectListObjectType.Companies,
-    modalIgnoredProperties: ['id', 'notes']
+    propertyRedirectData: [
+      {
+        sourcePropertyName: "positions",
+        redirectUrl: "https://google.com",
+      }
+    ],
+    modalIgnoredProperties: ['id', 'notes'],
   },
 
   [ObjectListObjectType.Positions]: {
@@ -36,10 +42,23 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
     icon: "applications",
     objectType: ObjectListObjectType.Applications,
   },
+  
+  [ObjectListObjectType.Tasks]: {
+    objectName: "",
+    title: "",
+    icon: "",
+    objectType: ObjectListObjectType.Tasks
+  }
 };
 
 export function getObjectListViewData(
   objectListViewType: ObjectListObjectType,
 ): ObjectListViewData {
   return objectListViewConfig[objectListViewType];
+}
+
+export function getObjectListObjectTypeByName(objectName: string): ObjectListObjectType | undefined {
+  return Object.values(objectListViewConfig).find(
+    (config) => config.objectName === objectName
+  )?.objectType;
 }

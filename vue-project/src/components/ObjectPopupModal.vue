@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useObjectModal } from '@/composables/modalObjectData.vue';
+import { useObjectModal } from '@/composables/ModalObjectData.vue';
 import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import FormDisplayItem from './form/FormDisplayItem.vue';
 import FormEditItem from './form/FormEditItem.vue';
@@ -41,17 +41,17 @@ function onEditItemUpdate({ key, value }: { key: string | number; value: any }) 
                 
                 <button @click="modal.close()">Close</button>
 
-                <button v-if="modal.viewtype.value == ObjectModelViewType.DisplayView"
+                <button v-if="modal.viewtype.value == ObjectModelViewType.DisplayView && !modal.isViewOnly.value"
                     @click="modal.switchToEditView()">
                     Edit
                 </button>
 
-                <button v-if="modal.viewtype.value == ObjectModelViewType.EditView"
+                <button v-if="modal.viewtype.value == ObjectModelViewType.EditView && !modal.isViewOnly.value"
                     @click="modal.deleteObject()">
                     Delete
                 </button>
 
-                <button 
+                <button v-if="!modal.isViewOnly.value" 
                     @click="modal.confirm(modal.data)">
                     Confirm
                 </button>

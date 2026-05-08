@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './account/account.module';
 import { CompanyModule } from './company/company.module';
 import { PositionModule } from './position/position.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { PositionModule } from './position/position.module';
     AuthModule,
     AccountModule,
     CompanyModule,
-    PositionModule
+    PositionModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

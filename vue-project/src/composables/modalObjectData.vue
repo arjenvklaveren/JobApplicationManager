@@ -7,6 +7,7 @@ import { ref } from "vue";
 const isOpen = ref(false);
 const data = ref<any>(null);
 const viewtype = ref<ObjectModelViewType>();
+const isViewOnly = ref(false);
 const customElements = ref<CustomModalElement[] | null>();
 const ignoredElements = ref<string[] | null>();
 
@@ -15,13 +16,14 @@ let cancelCallback: (() => void) | null = null;
 let deleteCallback: ((value: any) => void) | null = null;
 
 export function useObjectModal() {
-    function open(payload: any, modalViewtype: ObjectModelViewType, ignoredElementsKeys?: string[] | null, customModalElements?: CustomModalElement[] | null) {
+    function open(payload: any, modalViewtype: ObjectModelViewType, viewOnly: boolean, ignoredElementsKeys?: string[] | null, customModalElements?: CustomModalElement[] | null) {
 
         data.value = { ...payload };
         isOpen.value = true;
         viewtype.value = modalViewtype; 
         customElements.value = customModalElements || null;
         ignoredElements.value = ignoredElementsKeys || null;
+        isViewOnly.value = viewOnly;
 
         return {
             onConfirm(cb: (value: any) => void) {
@@ -73,6 +75,7 @@ export function useObjectModal() {
         isOpen,
         data,
         viewtype,
+        isViewOnly,
         customElements,
         ignoredElements,
         open,

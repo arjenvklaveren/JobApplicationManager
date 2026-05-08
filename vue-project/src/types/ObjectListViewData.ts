@@ -1,5 +1,6 @@
 import type { ObjectListObjectType } from "@/enums/ObjectListObjectType";
 import type { CustomModalElement } from "./CustomModalElement";
+import type { ListObjectRedirectData } from "./ListObjectRedirectData";
 
 export interface ObjectListViewData {
     objectName: string,
@@ -10,6 +11,8 @@ export interface ObjectListViewData {
     customDeletePath?: string | null,
     title: string,
     icon: string,
+
+    propertyRedirectData?: ListObjectRedirectData[] | null;
 
     customObjectModalElements?: CustomModalElement[] | null,
     modalIgnoredProperties?: string[] | null,
