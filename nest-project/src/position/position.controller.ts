@@ -22,19 +22,19 @@ export class PositionController {
     }
 
     @Post('add-position')
-    public async addCompany(@Body() positionDTO: PositionDTO, @User() user: any) {
+    public async addPosition(@Body() positionDTO: PositionDTO, @User() user: any) {
 
         await this.positionService.addPosition(positionDTO, user.sub);
     }
 
     @Put('update-position')
-    public async updateCompany(@Body() positionDTO: PositionDTO) {
+    public async updatePosition(@Body() positionDTO: PositionDTO) {
         
         await this.positionService.updatePosition(positionDTO);
     }
 
     @Delete('delete-position/:id')
-    public async deleteCompany(@Param('id', ParseIntPipe) positionId, @User() user: any) {
+    public async deletePosition(@Param('id', ParseIntPipe) positionId, @User() user: any) {
 
         await this.positionService.deletePosition(positionId, user.sub);
     }

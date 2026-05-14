@@ -4,8 +4,9 @@
     <RouterLink to="/dashboard">Dashboard</RouterLink>
     <RouterLink to="/companies">Companies</RouterLink>
     <RouterLink to="/positions">Positions</RouterLink>
-    <!-- <RouterLink to="/applications">Applications</RouterLink>
-    <RouterLink to="/appointments">Appointments</RouterLink> -->
+    <RouterLink to="/appointments">Appointments</RouterLink>
+    <RouterLink to="/applications">Applications</RouterLink>
+    <RouterLink to="/contact-people">Contact People</RouterLink>
     <RouterLink to="/tasks">Tasks</RouterLink>
 </div>
     

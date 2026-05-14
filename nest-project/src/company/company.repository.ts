@@ -9,7 +9,7 @@ export class CompanyRepository {
     public async getAllAsync(accountId: number) {
         return await this.prisma.company.findMany({
             where: { accountId: accountId },
-            include: { positions: true }
+            include: { positions: true, contact: true }
         });
     }
 

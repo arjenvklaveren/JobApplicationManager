@@ -6,14 +6,19 @@ import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
 import { useObjectModal } from '@/composables/ModalObjectData.vue';
 import { getObjectListObjectTypeByName, getObjectListViewData } from '@/router/objectListViewConfig';
-import { ObjectListObjectType } from '@/enums/ObjectListObjectType';
 import type { ListObjectRedirectData } from '@/types/ListObjectRedirectData';
+import { useRoute } from 'vue-router';
+import router from '@/router';
 
 const props = defineProps<ObjectListViewData>()
 var listData: any = ref([]);
 var loading = ref<boolean>(true);
 
 const objectModal = useObjectModal();
+
+const route = useRoute();
+
+console.log(route.query);
 
 loadObjectListData();
 
@@ -109,7 +114,7 @@ function onCLickItemArrayObject(event: Event, item: any, objectIdentifier: strin
 
     //TEMP
     if (redirectData != null) {
-        window.location.href = redirectData.redirectUrl;
+        router.push(redirectData.redirectUrl);
     }
 }
 
@@ -174,7 +179,7 @@ function onClickItemJsonObject(event: Event, item: any, objectIdentifier: string
                             <span v-else 
                                 @click="onClickItemJsonObject($event, listItemValue, key.toString())" 
                                 class="list-item-object-json">
-                                {{ listItemValue['name'] || '[NO-NAME]' }}
+                                {{ listItemValue['name'] || '[NO-DISPLAY-NAME]' }}
                             </span>
 
                         </span>

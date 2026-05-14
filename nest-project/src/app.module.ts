@@ -8,6 +8,9 @@ import { AccountModule } from './account/account.module';
 import { CompanyModule } from './company/company.module';
 import { PositionModule } from './position/position.module';
 import { TaskModule } from './task/task.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { ContactPersonModule } from './contact-person/contact-person.module';
+import { ApplicationModule } from './application/application.module';
 
 @Module({
   imports: [
@@ -17,6 +20,9 @@ import { TaskModule } from './task/task.module';
     CompanyModule,
     PositionModule,
     TaskModule,
+    AppointmentModule,
+    ContactPersonModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

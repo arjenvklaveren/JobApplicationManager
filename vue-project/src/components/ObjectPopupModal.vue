@@ -33,7 +33,7 @@ function onEditItemUpdate({ key, value }: { key: string | number; value: any }) 
                         :key="index"
                         :is="{ ...element.component }"
                         v-bind="element.props"
-                        :isEditMode="modal.viewtype.value == ObjectModelViewType.EditView"
+                        :isEditMode="modal.viewtype.value == ObjectModelViewType.EditView || modal.viewtype.value == ObjectModelViewType.CreateView"
                         :initialObject="modal.data"
                         @update="onEditItemUpdate"
                     />

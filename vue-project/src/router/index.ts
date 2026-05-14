@@ -34,16 +34,24 @@ const router = createRouter({
       component: ObjectListView,
       props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.Positions)
     },
-    // {
-    //   path: '/appointments',
-    //   name: 'appointments',
-    //   component: AppointmentListView,
-    // },
-    // {
-    //   path: '/applications',
-    //   name: 'applications',
-    //   component: ApplicationListView,
-    // },
+    {
+      path: '/appointments',
+      name: 'appointments',
+      component: ObjectListView,
+      props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.Appointments)
+    },
+    {
+      path: '/applications',
+      name: 'applications',
+      component: ObjectListView,
+      props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.Applications)
+    },
+    {
+      path: '/contact-people',
+      name: 'contact-people',
+      component: ObjectListView,
+      props: (): ObjectListViewData => getObjectListViewData(ObjectListObjectType.ContactPerson)
+    },
     {
       path: '/tasks',
       name: 'tasks',

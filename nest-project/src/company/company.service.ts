@@ -21,6 +21,7 @@ export class CompanyService {
             name: companyDTO.name,
             city: companyDTO.city,
             websiteUrl: companyDTO.websiteUrl,
+            isAgency: companyDTO.isAgency,
             account: {
                 connect: { id: accountId }
             }
@@ -35,6 +36,7 @@ export class CompanyService {
             name: companyDTO.name,
             city: companyDTO.city,
             websiteUrl: companyDTO.websiteUrl,
+            isAgency: companyDTO.isAgency,
         }
 
         await this.companyRepository.updateAsync(updateCompanyObject, companyDTO.id!);

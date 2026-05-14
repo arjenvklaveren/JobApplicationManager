@@ -118,7 +118,7 @@ function openTaskModal(item: any, modelView: ObjectModelViewType) {
 
 async function onObjectCreated(object: any) {
     loading.value = true;
-    await api.post("TODO", object)
+    await api.post("/task/add-task", object)
         .then(() => {
             todoGrid.addWidget(generateItemFromTaskObject(object));
             loading.value = false;

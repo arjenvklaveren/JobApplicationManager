@@ -4,12 +4,12 @@ import { PrismaService } from 'src/misc/prisma.service';
 
 @Injectable()
 export class PositionRepository {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     public async getAllAsync(accountId: number) {
         return await this.prisma.position.findMany({
             where: { accountId: accountId },
-            include: { company: true }
+            include: { company: true },
         });
     }
 
@@ -19,29 +19,32 @@ export class PositionRepository {
                 companyId: companyId,
                 accountId: accountId,
             },
-            include: {company: true}
-        })
+            include: { company: true },
+        });
     }
 
-     public async createAsync(position: Prisma.PositionCreateInput) {
-            await this.prisma.position.create({ data: position });
-        }
-    
-    public async updateAsync(position: Prisma.PositionUpdateInput, positionId: number,) {
+    public async createAsync(position: Prisma.PositionCreateInput) {
+        await this.prisma.position.create({ data: position });
+    }
+
+    public async updateAsync(
+        position: Prisma.PositionUpdateInput,
+        positionId: number,
+    ) {
         return await this.prisma.position.update({
             where: {
                 id: positionId,
             },
-            data: position
-        })
+            data: position,
+        });
     }
-    
+
     public async deleteAsync(positionId: number, accountId: number) {
         return await this.prisma.position.delete({
             where: {
                 id: positionId,
-                accountId: accountId
-            }
-        })
+                accountId: accountId,
+            },
+        });
     }
 }

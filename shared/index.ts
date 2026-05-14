@@ -6,3 +6,5 @@ export * from "./DTOs/ApplicationDTO";
 export * from "./DTOs/ApplicantDTO";
 export * from "./DTOs/NoteDTO";
 export * from "./DTOs/TaskDTO";
+export * from "./DTOs/AppointmentDTO";
+export * from "./DTOs/ContactPersonDTO";

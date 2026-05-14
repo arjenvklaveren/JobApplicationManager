@@ -11,4 +11,5 @@ export enum NoteTargetType {
     COMPANY,
     POSITION,
     APPLICATION,
+    APPOINTMENT
 }

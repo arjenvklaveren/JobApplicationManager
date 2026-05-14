@@ -11,7 +11,7 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
     propertyRedirectData: [
       {
         sourcePropertyName: "positions",
-        redirectUrl: "https://google.com",
+        redirectUrl: "/positions",
       }
     ],
     modalIgnoredProperties: ['id', 'notes'],
@@ -20,7 +20,7 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
   [ObjectListObjectType.Positions]: {
     objectName: "position",
     title: "Positions",
-    icon: "positions",
+    icon: "position",
     customObjectModalElements: [
       {
         component: SearchObjectRefItem,
@@ -39,8 +39,22 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
   [ObjectListObjectType.Applications]: {
     objectName: "application",
     title: "Applications",
-    icon: "applications",
+    icon: "application",
     objectType: ObjectListObjectType.Applications,
+  },
+
+  [ObjectListObjectType.Appointments]: {
+    objectName: "appointment",
+    title: "Appointments",
+    icon: "appointment",
+    objectType: ObjectListObjectType.Applications,
+  },
+
+  [ObjectListObjectType.ContactPerson]: {
+    objectName: "contact-person",
+    title: "Contact People",
+    icon: "contact-people",
+    objectType: ObjectListObjectType.ContactPerson,
   },
   
   [ObjectListObjectType.Tasks]: {
