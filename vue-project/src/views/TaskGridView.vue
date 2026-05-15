@@ -8,7 +8,8 @@ import { useObjectModal } from '@/composables/ModalObjectData.vue';
 import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
 import { ObjectListObjectType } from '@/enums/ObjectListObjectType';
-import { getObjectListObjectTypeByName, getObjectListViewData } from '@/router/objectListViewConfig';
+import { getObjectListViewData } from '@/router/objectListViewConfig';
+import type { ObjectListViewData } from '@/types/ObjectListViewData';
 
 const objectModal = useObjectModal();
 var loading = ref<boolean>(true);
@@ -35,10 +36,7 @@ var itemTemplate = `
 
 (window as any).clickTaskElement = function (item: HTMLElement) {
   let gridStackElement: any = item.closest('.grid-stack-item');
-
-  var taskConfig = getObjectListViewData(ObjectListObjectType.Tasks!); 
-
-  openTaskModal(gridStackElement.gridstackNode.taskData, ObjectModelViewType.EditView, taskConfig)
+  openTaskModal(gridStackElement.gridstackNode.taskData, ObjectModelViewType.EditView)
 };
 
 onMounted(() => {
@@ -111,12 +109,14 @@ function getGridByStage(stage: number) {
   }
 }
 
-function openTaskModal(item: any, modelView: ObjectModelViewType, taskConfig: any | null) {
+function openTaskModal(item: any, modelView: ObjectModelViewType) {
+
+    let taskConfig = getObjectListViewData(ObjectListObjectType.Tasks); 
 
     //Instantiate empty object if opened as create view
     if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(ObjectListObjectType.Tasks);
 
-    objectModal.open(item, modelView, false, taskConfig?.modalIgnoredProperties, taskConfig?.customObjectModalElements)
+    objectModal.open(item, modelView, false, taskConfig.modalIgnoredProperties, taskConfig.customObjectModalElements)
         .onConfirm((returnedObject) => {
 
             //Created a new object
@@ -193,7 +193,7 @@ async function onObjectDeleted(object: any) {
       <span v-if="loading" class="loader"></span>
     </div>
 
-    <button @click="openTaskModal(null, ObjectModelViewType.CreateView)">
+    <button @click="openTaskModal(null, ObjectModelViewType.CreateView, null)">
       Add
     </button>
 

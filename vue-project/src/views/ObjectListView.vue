@@ -7,7 +7,6 @@ import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHe
 import { useObjectModal } from '@/composables/ModalObjectData.vue';
 import { getObjectListObjectTypeByName, getObjectListViewData } from '@/router/objectListViewConfig';
 import type { ListObjectRedirectData } from '@/types/ListObjectRedirectData';
-import { useRoute } from 'vue-router';
 import router from '@/router';
 
 const props = defineProps<ObjectListViewData>()
@@ -15,10 +14,6 @@ var listData: any = ref([]);
 var loading = ref<boolean>(true);
 
 const objectModal = useObjectModal();
-
-const route = useRoute();
-
-console.log(route.query);
 
 loadObjectListData();
 
