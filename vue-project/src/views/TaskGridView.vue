@@ -193,7 +193,7 @@ async function onObjectDeleted(object: any) {
       <span v-if="loading" class="loader"></span>
     </div>
 
-    <button @click="openTaskModal(null, ObjectModelViewType.CreateView, null)">
+    <button @click="openTaskModal(null, ObjectModelViewType.CreateView)">
       Add
     </button>
 
