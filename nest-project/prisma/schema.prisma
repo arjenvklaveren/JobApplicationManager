@@ -115,7 +115,7 @@ model Task {
 model Appointment {
   id Int @default(autoincrement()) @id
   location String
-  time DateTime
+  time DateTime?
   company Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId Int?
 

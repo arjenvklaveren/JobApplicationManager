@@ -7,8 +7,6 @@ const props = defineProps<{
     isEditMode: boolean,
     refObjectMainKey: string,
     refObjectDisplayKey: string,
-    propertyLabel: string,
-    fetchUrl: string
 }>()
 
 var dropdownItems: any = ref([]);
@@ -28,7 +26,7 @@ function loadDropdownItems(event: any) {
             return;
         }
         
-        api.get(props.fetchUrl)
+        api.get(props.refObjectMainKey)
             .then((result: any) => {
 
                 
@@ -58,7 +56,7 @@ function selectDropdownItem(item: any) {
 <template>
 
 <div class="item-container">
-    <span class="item-label">{{ props.propertyLabel }}</span>
+    <span class="item-label">{{ props.refObjectMainKey.toLowerCase() }}</span>
     <span>: </span>
 
     <template v-if="props.isEditMode">    

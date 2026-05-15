@@ -1,37 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { Company } from 'generated/prisma/browser';
 import { Prisma } from 'generated/prisma/client';
+import { BaseRepository } from 'src/base/base.repository';
 import { PrismaService } from 'src/misc/prisma.service';
 
 @Injectable()
-export class CompanyRepository {
-    constructor(private prisma: PrismaService) { }
-    
-    public async getAllAsync(accountId: number) {
-        return await this.prisma.company.findMany({
-            where: { accountId: accountId },
-            include: { positions: true, contact: true }
-        });
-    }
-
-    public async createAsync(company: Prisma.CompanyCreateInput) {
-        await this.prisma.company.create({ data: company });
-    }
-
-    public async updateAsync(company: Prisma.CompanyUpdateInput, companyId: number,) {
-        return await this.prisma.company.update({
-            where: {
-                id: companyId,
-            },
-            data: company
-        })
-    }
-
-    public async deleteAsync(companyId: number, accountId: number) {
-        return await this.prisma.company.delete({
-            where: {
-                id: companyId,
-                accountId: accountId
-            }
-        })
+export class CompanyRepository extends BaseRepository<
+    Prisma.CompanyCreateInput,
+    Prisma.CompanyUpdateInput,
+    Prisma.CompanyWhereUniqueInput,
+    Company
+> {
+    constructor(prisma: PrismaService) { 
+        super(prisma.company, { positions: true, contact: true })
     }
 }

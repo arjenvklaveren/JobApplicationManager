@@ -1,15 +1,13 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
-import { User } from 'src/auth/decorators/user.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import type { AppointmentDTO } from '@jobapplicationmanager/shared';
+import { BaseController } from 'src/base/base.controller';
 
 @UseGuards(AuthGuard)
 @Controller('appointment')
-export class AppointmentController {
-    constructor(private appointmentService: AppointmentService) { }
-    
-    @Get('get-all')
-    public async getAppointments(@User() user: any) {
-        return await this.appointmentService.getAllAsync(user.sub);
+export class AppointmentController extends BaseController <AppointmentDTO> {
+    constructor(private appointmentService: AppointmentService) { 
+        super(appointmentService);
     }
 }

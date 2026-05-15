@@ -3,46 +3,43 @@ import { CompanyRepository } from './company.repository';
 import { CompanyDTO } from '@jobapplicationmanager/shared';
 import { Prisma } from 'generated/prisma/browser';
 import { mapCompanyToDTO } from 'helpers/dtoConverterHelper';
+import { BaseService } from 'src/base/base.service';
 
 @Injectable()
-export class CompanyService {
-    constructor(private companyRepository: CompanyRepository) {}
-
-    public async getAllCompaniesFromUser(accountId: number) {
-        var companies = await this.companyRepository.getAllAsync(accountId);
-
-        var companiesDTOs = companies.map(mapCompanyToDTO);
-        return companiesDTOs;
+export class CompanyService extends BaseService<
+    CompanyDTO,
+    Prisma.CompanyCreateInput,
+    Prisma.CompanyUpdateInput,
+     Prisma.CompanyGetPayload<{
+        include: {
+            positions: true, contact: true
+        };
+    }>
+    
+> {
+    constructor(private companyRepository: CompanyRepository) {
+        super(companyRepository, ((company) => mapCompanyToDTO(company)))
     }
 
-    public async addCompany(companyDTO: CompanyDTO, accountId: number) {
-
-        const createCompanyObject: Prisma.CompanyCreateInput = {
-            name: companyDTO.name,
-            city: companyDTO.city,
-            websiteUrl: companyDTO.websiteUrl,
-            isAgency: companyDTO.isAgency,
+    protected mapCreate(dto: CompanyDTO, accountId: number): Prisma.CompanyCreateInput {
+        return {
+            name: dto.name,
+            city: dto.city,
+            websiteUrl: dto.websiteUrl,
+            isAgency: dto.isAgency,
             account: {
-                connect: { id: accountId }
+                connect: {
+                    id: accountId
+                }
             }
         }
-
-        await this.companyRepository.createAsync(createCompanyObject);
     }
-
-    public async updateCompany(companyDTO: CompanyDTO) {
-
-        const updateCompanyObject: Prisma.CompanyUpdateInput = {
-            name: companyDTO.name,
-            city: companyDTO.city,
-            websiteUrl: companyDTO.websiteUrl,
-            isAgency: companyDTO.isAgency,
+    protected mapUpdate(dto: CompanyDTO): Prisma.CompanyUpdateInput {
+        return {
+            name: dto.name,
+            city: dto.city,
+            websiteUrl: dto.websiteUrl,
+            isAgency: dto.isAgency,
         }
-
-        await this.companyRepository.updateAsync(updateCompanyObject, companyDTO.id!);
-    }
-
-    public async deleteCompany(companyId: number, accountId: number) {
-        await this.companyRepository.deleteAsync(companyId, accountId);
     }
 }

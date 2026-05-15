@@ -88,6 +88,7 @@ export function mapAppointmentToDTO(appointment: Appointment, company: Company |
 
 export function mapContactPersonToDTO(contactPerson: ContactPerson, company: Company): ContactPersonDTO {
     return {
+        id: contactPerson.id,
         name: contactPerson.name,
         position: contactPerson.position,
         phone: contactPerson.phone,

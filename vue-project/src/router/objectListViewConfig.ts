@@ -26,9 +26,7 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
         component: SearchObjectRefItem,
         props: {
             refObjectMainKey: "company",
-            refObjectDisplayKey: "name",
-            propertyLabel: "company",
-            fetchUrl: "company/get-all"    
+            refObjectDisplayKey: "name",  
         }
       },
     ],
@@ -41,13 +39,32 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
     title: "Applications",
     icon: "application",
     objectType: ObjectListObjectType.Applications,
+    customObjectModalElements: [
+      {
+        component: SearchObjectRefItem,
+        props: {
+            refObjectMainKey: "position",
+            refObjectDisplayKey: "title", 
+        }
+      },
+    ],
+    modalIgnoredProperties: ["id", "position"],
   },
 
   [ObjectListObjectType.Appointments]: {
     objectName: "appointment",
     title: "Appointments",
     icon: "appointment",
-    objectType: ObjectListObjectType.Applications,
+    objectType: ObjectListObjectType.Appointments,
+    customObjectModalElements: [
+      {
+        component: SearchObjectRefItem,
+        props: {
+            refObjectMainKey: "company",
+            refObjectDisplayKey: "name", 
+        }
+      },
+    ]
   },
 
   [ObjectListObjectType.ContactPerson]: {
@@ -55,13 +72,24 @@ const objectListViewConfig: Record<ObjectListObjectType, ObjectListViewData> = {
     title: "Contact People",
     icon: "contact-people",
     objectType: ObjectListObjectType.ContactPerson,
+    customObjectModalElements: [
+      {
+        component: SearchObjectRefItem,
+        props: {
+            refObjectMainKey: "company",
+            refObjectDisplayKey: "name", 
+        }
+      },
+    ],
+    modalIgnoredProperties: ["id", "company"],
   },
   
   [ObjectListObjectType.Tasks]: {
     objectName: "",
     title: "",
     icon: "",
-    objectType: ObjectListObjectType.Tasks
+    objectType: ObjectListObjectType.Tasks,
+    modalIgnoredProperties: ["id"],
   }
 };
 

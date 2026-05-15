@@ -8,6 +8,7 @@ import { useObjectModal } from '@/composables/ModalObjectData.vue';
 import { ObjectModelViewType } from '@/enums/ObjectModalViewType';
 import { generateDefaultListObject } from '@/helpers/GenerateDefaultListObjectHelper';
 import { ObjectListObjectType } from '@/enums/ObjectListObjectType';
+import { getObjectListObjectTypeByName, getObjectListViewData } from '@/router/objectListViewConfig';
 
 const objectModal = useObjectModal();
 var loading = ref<boolean>(true);
@@ -21,11 +22,31 @@ var gridOpts = {
   minRow: 1,
   cellHeight: 50,
   margin: 5,
+  itemClass: 'grid-task-item',
   acceptWidgets: true,
   removable: '.delete-item-container'
 }
 
+var itemTemplate = `
+  <div onclick="clickTaskElement(this)">
+    <p>TODO</p>
+  </div>
+`;
+
+(window as any).clickTaskElement = function (item: HTMLElement) {
+  let gridStackElement: any = item.closest('.grid-stack-item');
+
+  var taskConfig = getObjectListViewData(ObjectListObjectType.Tasks!); 
+
+  openTaskModal(gridStackElement.gridstackNode.taskData, ObjectModelViewType.EditView, taskConfig)
+};
+
 onMounted(() => {
+
+  GridStack.renderCB = function(el, w) {
+    el.innerHTML = w.content ?? '';
+  };
+
   initializeGrids();
   generateGridItems();
 })
@@ -46,7 +67,7 @@ function initializeGrids() {
 async function generateGridItems() {
   let taskObjects;
 
-  await api.get("/task/get-all")
+  await api.get("/task")
     .then((result) => {
       taskObjects = result.data;
       loading.value = false;
@@ -68,8 +89,13 @@ async function generateGridItems() {
 function generateItemFromTaskObject(taskObject: TaskDTO) {
   return {
     w: 12,
-    content: taskObject.description
+    content: getItemContentElement(taskObject),
+    taskData: taskObject
   }
+}
+
+function getItemContentElement(taskObject: TaskDTO) {
+  return itemTemplate;
 }
 
 function getGridByStage(stage: number) {
@@ -85,12 +111,12 @@ function getGridByStage(stage: number) {
   }
 }
 
-function openTaskModal(item: any, modelView: ObjectModelViewType) {
+function openTaskModal(item: any, modelView: ObjectModelViewType, taskConfig: any | null) {
 
     //Instantiate empty object if opened as create view
     if (modelView == ObjectModelViewType.CreateView) item = generateDefaultListObject(ObjectListObjectType.Tasks);
 
-    objectModal.open(item, modelView, false)
+    objectModal.open(item, modelView, false, taskConfig?.modalIgnoredProperties, taskConfig?.customObjectModalElements)
         .onConfirm((returnedObject) => {
 
             //Created a new object
@@ -118,7 +144,7 @@ function openTaskModal(item: any, modelView: ObjectModelViewType) {
 
 async function onObjectCreated(object: any) {
     loading.value = true;
-    await api.post("/task/add-task", object)
+    await api.post("/task", object)
         .then(() => {
             todoGrid.addWidget(generateItemFromTaskObject(object));
             loading.value = false;
@@ -131,7 +157,7 @@ async function onObjectCreated(object: any) {
 
 async function onObjectEdited(object: any) {
     loading.value = true;
-    await api.put("TODO", object)
+    await api.put("/task", object)
         .then(() => {
             //TODO
             loading.value = false;
@@ -145,7 +171,7 @@ async function onObjectEdited(object: any) {
 
 async function onObjectDeleted(object: any) {
     loading.value = true;
-    await api.delete("TODO")
+    await api.delete("/task")
         .then(() => {
             //TODO
             loading.value = false;
@@ -197,7 +223,7 @@ async function onObjectDeleted(object: any) {
 
 </template>
 
-<style>
+<style lang="scss">
 
 .main-container {
   width: 100%;
@@ -215,6 +241,13 @@ async function onObjectDeleted(object: any) {
 .grid-stack {
   background: #FAFAD2;
   width: 100%;
+}
+
+.grid-task-item {
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .grid-stack-item-content {

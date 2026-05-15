@@ -23,7 +23,7 @@ console.log(route.query);
 loadObjectListData();
 
 async function loadObjectListData() {
-    await api.get(props.objectName + "/" + (props.customGetPath ?? "get-all"))
+    await api.get(props.objectName + (props.customGetPath ?? "/"))
         .then((data) => {
             loading.value = false;
             listData.value = data.data;
@@ -67,7 +67,7 @@ function openObjectModal(item: any, modelView: ObjectModelViewType) {
 
 async function onObjectCreated(object: any) {
     loading.value = true;
-    await api.post(props.objectName + "/" + (props.customAddPath ?? "add-" + props.objectName), object)
+    await api.post(props.objectName + (props.customAddPath ?? "/"), object)
         .then(() => {
             listData.value = [...listData.value, object];
             loading.value = false;
@@ -80,7 +80,7 @@ async function onObjectCreated(object: any) {
 
 async function onObjectEdited(object: any) {
     loading.value = true;
-    await api.put(props.objectName + "/" + (props.customUpdatePath ?? "update-" + props.objectName), object)
+    await api.put(props.objectName + (props.customUpdatePath ?? "/"), object)
         .then(() => {
             listData.value = listData.value.map((listItem: any) =>
                 listItem.id === object.id ? object : listItem);
@@ -95,7 +95,7 @@ async function onObjectEdited(object: any) {
 
 async function onObjectDeleted(object: any) {
     loading.value = true;
-    await api.delete(props.objectName + "/" + (props.customDeletePath ?? "delete-" + props.objectName) + "/" + object.id)
+    await api.delete(props.objectName + (props.customDeletePath ?? "/") + object.id)
         .then(() => {
             listData.value = listData.value.filter((listItem: any) =>
                 listItem.id !== object.id);
@@ -112,7 +112,7 @@ function onCLickItemArrayObject(event: Event, item: any, objectIdentifier: strin
     event.stopPropagation();
     var redirectData: ListObjectRedirectData | null = props.propertyRedirectData?.find((item) => item.sourcePropertyName == objectIdentifier) ?? null;
 
-    //TEMP
+    //TODO
     if (redirectData != null) {
         router.push(redirectData.redirectUrl);
     }

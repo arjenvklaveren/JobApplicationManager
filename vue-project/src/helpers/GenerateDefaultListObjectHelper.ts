@@ -1,5 +1,5 @@
 import { ObjectListObjectType } from "@/enums/ObjectListObjectType";
-import { defaultCompanyDTO, defaultPositionDTO, defaultTaskDTO } from "@jobapplicationmanager/shared";
+import { defaultApplicationDTO, defaultAppointmentDTO, defaultCompanyDTO, defaultContactPersonDTO, defaultPositionDTO, defaultTaskDTO } from "@jobapplicationmanager/shared";
 
 export function generateDefaultListObject(objectType: ObjectListObjectType) {
     switch (objectType) {
@@ -9,6 +9,12 @@ export function generateDefaultListObject(objectType: ObjectListObjectType) {
             return defaultPositionDTO();
         case ObjectListObjectType.Tasks:
             return defaultTaskDTO();
+        case ObjectListObjectType.ContactPerson:
+            return defaultContactPersonDTO();
+        case ObjectListObjectType.Applications:
+            return defaultApplicationDTO();
+        case ObjectListObjectType.Appointments:
+            return defaultAppointmentDTO();
         default:
             return { error: 'type not found!' };
     }

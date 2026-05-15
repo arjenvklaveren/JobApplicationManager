@@ -1,15 +1,13 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { ApplicationService } from './application.service';
-import { User } from 'src/auth/decorators/user.decorator';
+import type { ApplicationDTO } from '@jobapplicationmanager/shared';
+import { BaseController } from 'src/base/base.controller';
 
 @UseGuards(AuthGuard)
 @Controller('application')
-export class ApplicationController {
-    constructor(private applicationService: ApplicationService) { }
-    
-    @Get('get-all')
-    public async getApplications(@User() user: any) {
-        return await this.applicationService.getAllAsync(user.sub);
+export class ApplicationController extends BaseController<ApplicationDTO> {
+    constructor(private applicationService: ApplicationService) { 
+        super(applicationService);
     }
 }
